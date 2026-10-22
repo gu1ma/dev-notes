@@ -1,0 +1,47 @@
+% node, pnpm, nvm
+
+# Instalar dependências respeitando o lockfile
+pnpm install --frozen-lockfile
+
+# Adicionar dependência em um pacote do monorepo
+pnpm --filter <pacote> add <dependencia>
+
+# Adicionar dependência de desenvolvimento em um pacote do monorepo
+pnpm --filter <pacote> add -D <dependencia>
+
+# Rodar um script em um pacote do monorepo
+pnpm --filter <pacote> <script>
+
+# Ver por que uma dependência está instalada
+pnpm why <dependencia>
+
+# Ver dependências desatualizadas
+pnpm outdated
+
+# Listar scripts disponíveis no package.json
+jq '.scripts' package.json
+
+# Rodar um binário do projeto sem instalar globalmente
+pnpm exec <comando>
+
+# Reinstalar tudo do zero (apaga node_modules)
+find . -name node_modules -type d -prune -exec rm -rf {} + && pnpm install
+
+# Rodar um teste específico com vitest
+npx vitest run <arquivo>
+
+# Rodar vitest em modo watch filtrando por nome do teste
+npx vitest -t "<nome_do_teste>"
+
+# Trocar a versão do Node
+nvm use <versao>
+
+# Instalar uma versão do Node
+nvm install <versao>
+
+# Listar versões do Node instaladas
+nvm ls
+
+$ pacote: echo -e "bop-portal-frontend\nbop-portal-server"
+$ script: jq -r '.scripts | keys[]' package.json
+$ versao: echo -e "lts/*\n22\n20"

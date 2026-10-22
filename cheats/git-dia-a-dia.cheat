@@ -1,0 +1,158 @@
+% git, dia a dia
+
+# Status resumido
+git status --short
+
+# Histórico em grafo compacto
+git log --oneline --graph --decorate -20
+
+# Histórico de um arquivo (inclui renomeações)
+git log --oneline --follow -- <arquivo>
+
+# Commits de um autor
+git log --oneline --author="<autor>"
+
+# Ver o que mudou e ainda não está no stage
+git diff
+
+# Ver o que está no stage (vai entrar no commit)
+git diff --staged
+
+# Adicionar partes de um arquivo interativamente (hunks)
+git add -p <arquivo>
+
+# Tirar arquivo do stage (mantém a alteração)
+git restore --staged <arquivo>
+
+# Descartar alterações de um arquivo (cuidado: perde a mudança)
+git restore <arquivo>
+
+# Corrigir a mensagem do último commit (antes do push)
+git commit --amend
+
+# Adicionar arquivos esquecidos no último commit sem mudar a mensagem
+git commit --amend --no-edit
+
+# Desfazer o último commit mantendo as alterações
+git reset --soft HEAD~1
+
+% git, branches
+
+# Criar e trocar para um branch novo
+git switch -c <novo_branch>
+
+# Trocar de branch
+git switch <branch>
+
+# Voltar para o branch anterior
+git switch -
+
+# Listar branches ordenados pelo último commit
+git branch --sort=-committerdate
+
+# Apagar branch local
+git branch -d <branch>
+
+# Apagar branches locais já mergeados no develop
+git branch --merged develop | grep -vE "^\*|develop|main" | xargs git branch -d
+
+# Atualizar referências e remover branches remotos apagados
+git fetch --prune
+
+# Atualizar o branch atual com o develop via rebase
+git fetch origin && git rebase origin/develop
+
+# Atualizar o branch atual com o develop via merge
+git fetch origin && git merge origin/develop
+
+# Trazer um commit específico de outro branch
+git cherry-pick <hash>
+
+$ branch: git branch --format='%(refname:short)'
+$ hash: git log --oneline -30 --all --- --column 1
+
+% git, stash
+
+# Guardar alterações temporariamente (com nome)
+git stash push -m "<mensagem>"
+
+# Guardar incluindo arquivos novos (untracked)
+git stash push -u -m "<mensagem>"
+
+# Listar stashes
+git stash list
+
+# Ver o conteúdo de um stash
+git stash show -p <stash>
+
+# Aplicar e remover o stash mais recente
+git stash pop
+
+# Aplicar um stash específico sem remover
+git stash apply <stash>
+
+$ stash: git stash list --- --column 1 --delimiter ':'
+
+% git, comparar
+
+# O que o meu branch mudou desde que saiu do develop
+git diff origin/develop...HEAD
+
+# Arquivos que o meu branch mudou desde que saiu do develop
+git diff origin/develop...HEAD --name-only
+
+# Commits do meu branch que não estão no develop
+git log --oneline origin/develop..HEAD
+
+# Comparar um arquivo entre dois branches
+git diff <branch> <branch2> -- <arquivo>
+
+# Ver um arquivo como estava em outro branch/commit
+git show <ref>:<arquivo>
+
+# Salvar a versão de um arquivo de outro branch em /tmp (para abrir no editor)
+git show <ref>:<arquivo> > "/tmp/$(basename <ref>)-$(basename <arquivo>)"
+
+$ branch: git branch -a --format='%(refname:short)'
+$ branch2: git branch -a --format='%(refname:short)'
+$ ref: git branch -a --format='%(refname:short)'
+$ arquivo: git ls-files
+
+% git, recuperar, emergência
+
+# Ver tudo que o HEAD já apontou (recuperar commits "perdidos")
+git reflog -20
+
+# Voltar o branch para um ponto do reflog (cuidado: descarta o que veio depois)
+git reset --hard <hash>
+
+# Criar branch a partir de um commit recuperado do reflog
+git switch -c <novo_branch> <hash>
+
+# Abortar merge em andamento
+git merge --abort
+
+# Abortar rebase em andamento
+git rebase --abort
+
+# Ver arquivos não rastreados que seriam apagados (simulação)
+git clean -nd
+
+$ hash: git reflog -30 --format='%h %gs' --- --column 1
+
+% git, worktree
+
+# Criar worktree em .worktrees com branch nova
+git worktree add .worktrees/<nome> -b <tipo>/<nome>
+
+# Criar worktree a partir de um branch existente
+git worktree add .worktrees/<nome> <branch>
+
+# Listar worktrees
+git worktree list
+
+# Remover worktree
+git worktree remove .worktrees/<nome>
+
+$ tipo: echo -e "feat\nfix\nrefactor\nchore"
+$ branch: git branch --format='%(refname:short)'

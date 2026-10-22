@@ -1,0 +1,97 @@
+% processos, portas, sistema
+
+# Ver qual processo está usando uma porta
+lsof -i :<porta>
+
+# Matar o processo que está usando uma porta
+lsof -ti :<porta> | xargs kill -9
+
+# Listar portas em uso (escutando)
+lsof -iTCP -sTCP:LISTEN -n -P
+
+# Procurar processo pelo nome
+ps aux | grep -i "<nome>" | grep -v grep
+
+# Matar processo pelo nome
+pkill -f "<nome>"
+
+# Matar processo pelo PID
+kill -9 <pid>
+
+# Ver o valor de uma variável de ambiente
+echo $<variavel>
+
+# Listar variáveis de ambiente (filtrando)
+env | grep -i "<texto>"
+
+# Ver onde um comando está instalado
+which -a <comando>
+
+# Recarregar o .zshrc sem abrir outro terminal
+source ~/.zshrc
+
+# Buscar no histórico de comandos
+history | grep "<texto>"
+
+# Medir quanto tempo um comando leva
+time <comando>
+
+$ porta: echo -e "3000\n3001\n4000\n5173\n8080"
+$ pid: ps -eo pid,comm | tail -n +2 --- --column 1
+
+% rede, curl
+
+# Fazer um GET e ver o corpo formatado como JSON
+curl -s <url> | jq .
+
+# Ver só os headers da resposta
+curl -sI <url>
+
+# Ver request e response completos (debug)
+curl -v <url>
+
+# POST com JSON
+curl -s -X POST <url> -H "Content-Type: application/json" -d '<json>'
+
+# Requisição com token Bearer
+curl -s <url> -H "Authorization: Bearer <token>"
+
+# Ver só o status HTTP
+curl -s -o /dev/null -w "%{http_code}\n" <url>
+
+# Baixar um arquivo
+curl -L -o <arquivo> <url>
+
+# Resolver DNS de um domínio
+dig +short <dominio>
+
+# Testar se um host responde
+ping -c 4 <dominio>
+
+# Ver o seu IP público
+curl -s https://ifconfig.me
+
+% macos
+
+# Copiar a saída de um comando para a área de transferência
+<comando> | pbcopy
+
+# Colar a área de transferência no terminal
+pbpaste
+
+# Abrir a pasta atual no Finder
+open .
+
+# Abrir arquivo ou URL no app padrão
+open <alvo>
+
+# Abrir pasta no VS Code
+code <pasta>
+
+# Impedir o Mac de dormir enquanto um comando roda
+caffeinate -i <comando>
+
+# Remover a quarentena de um binário baixado da internet
+xattr -d com.apple.quarantine <arquivo>
+
+$ pasta: echo -e ".\n~/Documents/pluxee/bop-portal-web"

@@ -1,0 +1,90 @@
+% arquivos, pastas, find, ln
+
+# Criar link simbólico (atalho) apontando para um arquivo ou pasta
+ln -s <origem> <nome_do_link>
+
+# Recriar/sobrescrever um link simbólico existente
+ln -sfn <origem> <nome_do_link>
+
+# Ver para onde um link simbólico aponta
+readlink <nome_do_link>
+
+# Listar links simbólicos na pasta
+find <pasta> -maxdepth 1 -type l -ls
+
+# Remover um link simbólico (sem apagar o destino; sem barra no final)
+unlink <nome_do_link>
+
+# Listar arquivos com detalhes, incluindo ocultos
+ls -la <pasta>
+
+# Listar arquivos ordenados por data (mais recentes primeiro)
+ls -lt <pasta>
+
+# Listar arquivos ordenados por tamanho
+ls -lS <pasta>
+
+# Criar pasta (e pastas intermediárias)
+mkdir -p <pasta>
+
+# Copiar pasta inteira
+cp -R <origem> <destino>
+
+# Mover ou renomear
+mv <origem> <destino>
+
+# Apagar pasta inteira (cuidado: sem lixeira)
+rm -rf <pasta>
+
+# Criar arquivo vazio (ou atualizar a data dele)
+touch <arquivo>
+
+# Encontrar arquivos pelo nome
+find <pasta> -name "<padrao>" -not -path "*/node_modules/*"
+
+# Encontrar arquivos pelo nome, ignorando maiúsculas
+find <pasta> -iname "<padrao>" -not -path "*/node_modules/*"
+
+# Encontrar só pastas pelo nome
+find <pasta> -type d -name "<padrao>" -not -path "*/node_modules/*"
+
+# Encontrar arquivos modificados nos últimos N dias
+find <pasta> -type f -mtime -<dias> -not -path "*/node_modules/*"
+
+# Encontrar arquivos maiores que um tamanho (ex.: 10M)
+find <pasta> -type f -size +<tamanho>
+
+# Encontrar e apagar todas as pastas node_modules (libera espaço)
+find <pasta> -name node_modules -type d -prune -exec rm -rf {} +
+
+# Tamanho de uma pasta
+du -sh <pasta>
+
+# Tamanho de cada item da pasta, ordenado
+du -sh <pasta>/* | sort -h
+
+# Espaço livre em disco
+df -h
+
+# Dar permissão de execução a um script
+chmod +x <arquivo>
+
+# Compactar pasta em .tar.gz
+tar -czf <nome>.tar.gz <pasta>
+
+# Extrair .tar.gz
+tar -xzf <arquivo>
+
+# Listar conteúdo de um .tar.gz sem extrair
+tar -tzf <arquivo>
+
+# Compactar pasta em .zip
+zip -r <nome>.zip <pasta>
+
+# Extrair .zip
+unzip <arquivo>
+
+$ pasta: echo -e ".\n~\n~/Documents\n~/Downloads"
+$ padrao: echo -e "*.ts\n*.tsx\n*.test.tsx\n*.md\n*.json"
+$ dias: echo -e "1\n7\n30"
+$ tamanho: echo -e "10M\n100M\n1G"

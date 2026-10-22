@@ -1,0 +1,47 @@
+% git, rastrear commit
+
+# Atualizar todas as referências remotas antes de investigar
+git fetch --all --prune
+
+# Achar commit pela mensagem em todos os branches (ignora maiúsculas/minúsculas)
+git log --all --oneline -i --grep="<texto>"
+
+# Ver autor, data e mensagem de um commit
+git log -1 --format='%h %an %ad %s' --date=iso <hash>
+
+# Quais branches (locais e remotos) contêm o commit
+git branch -a --contains <hash>
+
+# O commit está no histórico de uma ref? (ex.: HEAD, origin/develop)
+git merge-base --is-ancestor <hash> <ref> && echo sim || echo nao
+
+# O branch inteiro já foi mergeado em outro?
+git merge-base --is-ancestor origin/<branch> <ref> && echo sim || echo nao
+
+# Último commit de um branch
+git log -1 --format='%h %ad %s' --date=short origin/<branch>
+
+# Commits que estão no outro branch e ainda não estão no meu
+git log --oneline --format='%h %ad %s' --date=short HEAD..origin/<branch>
+
+# Quantos commits cada lado tem que o outro não tem (esquerda=meu, direita=outro)
+git rev-list --left-right --count HEAD...origin/<branch>
+
+# Commits (e merges) que mexeram no arquivo no meu histórico
+git log --oneline HEAD -- <arquivo>
+
+# Ver os pais de um commit de merge
+git log -1 --format='%h %ad %P %s' --date=iso <hash>
+
+# Qual versão do outro branch entrou num merge (2º pai)
+git log -1 --format='%h %ad %s' --date=iso <hash>^2
+
+# Merges que levaram um commit até um branch
+git log --oneline --merges --ancestry-path <hash>..origin/<branch>
+
+# Grafo de todos os branches só para um arquivo
+git log --graph --oneline --all -- <arquivo>
+
+$ hash: git log --oneline -30 --all --- --column 1
+$ branch: git branch -r --format='%(refname:lstrip=3)'
+$ ref: echo -e "HEAD\norigin/develop\norigin/main"

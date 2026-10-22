@@ -1,0 +1,70 @@
+% git, merge, conflitos
+
+# Ver o que está sendo mergeado (mensagem do merge em andamento)
+cat .git/MERGE_MSG
+
+# Ver o ancestral comum do merge em andamento
+git merge-base HEAD MERGE_HEAD
+
+# Ver uma versão do arquivo em conflito (1=base, 2=meu, 3=deles)
+git show :<stage>:<arquivo>
+
+# Mostrar a base dentro do conflito (descarta a resolução atual do arquivo)
+git checkout --conflict=diff3 -- <arquivo>
+
+# Sempre mostrar a base nos conflitos (config global zdiff3)
+git config --global merge.conflictStyle zdiff3
+
+# Commits que mexeram no arquivo em cada lado do merge
+git log --oneline --left-right HEAD...MERGE_HEAD -- <arquivo>
+
+# Achar o commit que introduziu/removeu uma string
+git log -S "<texto>" --oneline <ref> -- <arquivo>
+
+# Achar commit que mudou linhas batendo com uma regex
+git log -G "<regex>" --oneline <ref> -- <arquivo>
+
+# Achar o commit que introduziu/removeu uma string em todos os branches
+git log -S "<texto>" --oneline --all
+
+# Ver o diff de um commit só para um arquivo
+git show <hash> -- <arquivo>
+
+# Ver um commit detectando renames de arquivo
+git show -M <hash>
+
+# Ver quais arquivos um commit tocou
+git show --stat <hash>
+
+# O que um lado mudou em relação à base
+git diff $(git merge-base HEAD MERGE_HEAD) <ref> -- <arquivo>
+
+# O que o meu branch mudou desde a base (três pontos)
+git diff MERGE_HEAD...HEAD -- <arquivo>
+
+# O que o outro lado mudou desde a base (três pontos)
+git diff HEAD...MERGE_HEAD -- <arquivo>
+
+# Arquivos que o outro lado mudou desde a base
+git diff HEAD...MERGE_HEAD --stat
+
+# Comparar a minha resolução em andamento com meu lado / outro lado / base
+git diff --<lado> -- <arquivo>
+
+# Listar arquivos ainda em conflito
+git diff --name-only --diff-filter=U
+
+# Procurar referências a um nome em um lado do merge
+git grep -n "<texto>" <ref> -- .
+
+# Ver o commit de cada linha do arquivo (blame) em um lado do merge
+git blame <ref> -- <arquivo>
+
+# Histórico de um trecho específico do arquivo (a partir da linha que bate com a regex)
+git log -L '/<regex>/,+<linhas>:<arquivo>' <ref>
+
+$ stage: echo -e "1\n2\n3"
+$ ref: echo -e "HEAD\nMERGE_HEAD"
+$ lado: echo -e "ours\ntheirs\nbase"
+$ arquivo: git diff --name-only --diff-filter=U
+$ hash: git log --oneline -30 --- --column 1

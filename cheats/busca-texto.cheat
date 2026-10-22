@@ -1,0 +1,123 @@
+% busca, texto, grep, rg
+
+# Buscar texto em todos os arquivos da pasta (recursivo, com número da linha)
+grep -rn "<texto>" <pasta>
+
+# Buscar ignorando maiúsculas/minúsculas
+grep -rni "<texto>" <pasta>
+
+# Buscar só em arquivos de uma extensão
+grep -rn "<texto>" <pasta> --include="*.<extensao>"
+
+# Buscar ignorando pastas (ex.: node_modules)
+grep -rn "<texto>" <pasta> --exclude-dir=node_modules --exclude-dir=dist
+
+# Listar só os nomes dos arquivos que contêm o texto
+grep -rl "<texto>" <pasta>
+
+# Contar ocorrências por arquivo
+grep -rc "<texto>" <pasta> | grep -v ":0$"
+
+# Mostrar linhas de contexto antes/depois da ocorrência
+grep -rn -C <linhas> "<texto>" <pasta>
+
+# Buscar palavra inteira (não pega pedaços de outras palavras)
+grep -rnw "<texto>" <pasta>
+
+# Buscar linhas que NÃO contêm o texto
+grep -v "<texto>" <arquivo>
+
+# Buscar com regex estendida (ex.: "foo|bar")
+grep -rnE "<regex>" <pasta>
+
+# ripgrep: buscar texto (rápido, respeita .gitignore)
+rg "<texto>"
+
+# ripgrep: buscar só em um tipo de arquivo (ts, js, json, md...)
+rg -t <tipo> "<texto>"
+
+# ripgrep: buscar por glob (ex.: "*.test.tsx")
+rg "<texto>" -g "<glob>"
+
+# ripgrep: listar só arquivos que contêm o texto
+rg -l "<texto>"
+
+# ripgrep: buscar string literal (sem regex, bom para símbolos como ( [ .)
+rg -F "<texto>"
+
+# ripgrep: incluir arquivos ocultos e ignorados pelo git
+rg -uu "<texto>"
+
+# ripgrep: substituir na saída (preview de um find/replace, não altera arquivo)
+rg "<texto>" -r "<substituto>"
+
+$ pasta: echo -e ".\nsrc\napps/frontend/src\napps/server/src"
+$ extensao: echo -e "ts\ntsx\njs\njson\nmd\nyaml"
+$ tipo: echo -e "ts\njs\njson\nmd\nyaml\ncss"
+$ linhas: echo -e "2\n3\n5\n10"
+
+% texto, sed, awk, manipulação
+
+# Substituir texto em um arquivo (macOS: -i '' é obrigatório)
+sed -i '' 's/<de>/<para>/g' <arquivo>
+
+# Substituir texto em vários arquivos encontrados pelo ripgrep
+rg -l "<de>" | xargs sed -i '' 's/<de>/<para>/g'
+
+# Imprimir um intervalo de linhas de um arquivo
+sed -n '<inicio>,<fim>p' <arquivo>
+
+# Apagar linhas que contêm um texto
+sed -i '' '/<texto>/d' <arquivo>
+
+# Imprimir uma coluna específica (separada por espaço)
+awk '{print $<coluna>}' <arquivo>
+
+# Imprimir uma coluna de um CSV
+awk -F',' '{print $<coluna>}' <arquivo>
+
+# Ordenar linhas e remover duplicadas
+sort <arquivo> | uniq
+
+# Contar linhas repetidas e ordenar pelas mais frequentes
+sort <arquivo> | uniq -c | sort -rn
+
+# Contar linhas, palavras e caracteres
+wc -l <arquivo>
+
+# Ver o começo / fim de um arquivo
+head -n <linhas> <arquivo>
+
+# Acompanhar um arquivo de log em tempo real
+tail -f <arquivo>
+
+# Comparar dois arquivos lado a lado
+diff -u <arquivo> <arquivo2>
+
+$ linhas: echo -e "10\n20\n50\n100"
+
+% json, jq
+
+# Formatar (pretty print) um JSON
+jq . <arquivo>
+
+# Pegar um campo de um JSON
+jq '.<campo>' <arquivo>
+
+# Listar as chaves de um objeto
+jq 'keys' <arquivo>
+
+# Pegar um campo de cada item de um array
+jq '.[].<campo>' <arquivo>
+
+# Filtrar itens de um array por valor
+jq '.[] | select(.<campo> == "<valor>")' <arquivo>
+
+# Ver os scripts de um package.json
+jq '.scripts' package.json
+
+# Ver as dependências de um package.json
+jq '.dependencies' package.json
+
+# Formatar o JSON copiado na área de transferência (macOS)
+pbpaste | jq .
